@@ -124,9 +124,9 @@ function Sidebar() {
     setIsMobileMenuOpen(prev => !prev);
     
     // Reset toggle lock after a short delay
-    setTimeout(() => {
-      setIsToggling(false);
-    }, 300);
+    // setTimeout(() => {
+    // }, 300);
+    setIsToggling(false);
   };
 
   return (
