@@ -217,6 +217,35 @@ function About() {
                     </span>
                   </h2>
 
+                  {/* Programming Languages */}
+                  <div className="mb-4 sm:mb-6 lg:mb-8">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
+                      Programming Languages
+                    </h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
+                      {[
+                        { skill: "C", icon: "🔤" },
+                        { skill: "C++", icon: "➕" },
+                        { skill: "Go", icon: "🐹" },
+                        { skill: "Python", icon: "🐍" },
+                        { skill: "Shell Scripting", icon: "🐚" },
+                        { skill: "JavaScript", icon: "🟨" },
+                      ].map((item, index) => (
+                        <div
+                          key={index}
+                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
+                        >
+                          <span className="text-2xl sm:text-3xl mb-2 block">
+                            {item.icon}
+                          </span>
+                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
+                            {item.skill}
+                          </h4>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Frontend Skills */}
                   <div className="mb-4 sm:mb-6 lg:mb-8">
                     <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
@@ -227,7 +256,6 @@ function About() {
                         { skill: "React.js", icon: "⚛️" },
                         { skill: "Vite.js", icon: "⚡" },
                         { skill: "Next.js", icon: "▲" },
-                        { skill: "JavaScript", icon: "🟨" },
                         { skill: "HTML5", icon: "🌐" },
                         { skill: "CSS", icon: "🎨" },
                         { skill: "Tailwind CSS", icon: "🎭" },
@@ -259,7 +287,6 @@ function About() {
                       {[
                         { skill: "Node.js", icon: "🟢" },
                         { skill: "Express.js", icon: "🚀" },
-                        { skill: "Python", icon: "🐍" },
                         { skill: "REST APIs", icon: "🔗" },
                         { skill: "JWT", icon: "🔐" },
                       ].map((item, index) => (

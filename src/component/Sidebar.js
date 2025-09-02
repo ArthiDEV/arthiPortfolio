@@ -70,6 +70,24 @@ function Sidebar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isMobileMenuOpen]);
 
+  // Prevent swipe gestures from opening menu
+  useEffect(() => {
+    const preventSwipeMenu = (e) => {
+      // Prevent swipe gestures on the edge of the screen
+      if (e.touches && e.touches[0] && e.touches[0].clientX < 50) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("touchstart", preventSwipeMenu, { passive: false });
+    document.addEventListener("touchmove", preventSwipeMenu, { passive: false });
+    
+    return () => {
+      document.removeEventListener("touchstart", preventSwipeMenu);
+      document.removeEventListener("touchmove", preventSwipeMenu);
+    };
+  }, []);
+
   // Handle Home/About link click
   const handleAboutClick = () => {
     setIsMobileMenuOpen(false);
@@ -89,12 +107,15 @@ function Sidebar() {
     }
   };
 
-  // Toggle mobile menu
+  // Toggle mobile menu - only on explicit click/tap
   const toggleMobileMenu = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Hamburger clicked, current state:", isMobileMenuOpen);
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    // Ensure this is a click/tap event, not a swipe or drag
+    if (e.type === 'click' || (e.type === 'touchend' && e.touches.length === 0)) {
+      console.log("Hamburger clicked, current state:", isMobileMenuOpen);
+      setIsMobileMenuOpen(!isMobileMenuOpen);
+    }
   };
 
   return (
@@ -106,7 +127,6 @@ function Sidebar() {
       >
         <button
           onClick={toggleMobileMenu}
-          onTouchStart={toggleMobileMenu}
           className={`hover-effect bg-dark-800/90 backdrop-blur-sm border-2 rounded-lg p-4 text-light-50 hover:bg-dark-700/90 transition-all duration-300 shadow-xl cursor-pointer min-w-[52px] min-h-[52px] flex items-center justify-center ${
             isMobileMenuOpen
               ? "border-secondary-400 bg-secondary-600/20"
@@ -116,7 +136,9 @@ function Sidebar() {
           style={{
             zIndex: 100,
             pointerEvents: "auto",
-            touchAction: "manipulation",
+            touchAction: "manipulation", // Prevent double-tap zoom and enable fast tap
+            userSelect: "none", // Prevent text selection
+            WebkitUserSelect: "none",
           }}
         >
           <svg
@@ -166,6 +188,10 @@ function Sidebar() {
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
         }`}
+        style={{
+          touchAction: "pan-y", // Only allow vertical scrolling, prevent horizontal swipes
+          overscrollBehavior: "contain", // Prevent scroll chaining
+        }}
       >
         {/* Logo/Brand */}
         <div className="mb-8 lg:mb-12 mt-12 lg:mt-0">
