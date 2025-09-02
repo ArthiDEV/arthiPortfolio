@@ -224,12 +224,12 @@ function About() {
                     </h3>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
                       {[
-                        { skill: "C", icon: "🔤" },
-                        { skill: "C++", icon: "➕" },
-                        { skill: "Go", icon: "🐹" },
-                        { skill: "Python", icon: "🐍" },
-                        { skill: "Shell Scripting", icon: "🐚" },
+                        // { skill: "C", icon: "🔤" },
+                        // { skill: "C++", icon: "➕" },
                         { skill: "JavaScript", icon: "🟨" },
+                        { skill: "Python", icon: "🐍" },
+                        { skill: "Go", icon: "🐹" },
+                        { skill: "Shell Scripting", icon: "🐚" },
                       ].map((item, index) => (
                         <div
                           key={index}
@@ -469,7 +469,7 @@ function About() {
                     {[
                       {
                         company: "Cloudbees Tech",
-                        role: "Web Developer",
+                        role: "Senior Web Developer",
                         period: "Sep 2023 - Present",
                         desc: "Leading a small team of 3 members, successfully completed 8+ projects with hands-on development and project management. Responsible for task assignment, team guidance, and ensuring project deliverables meet quality standards and deadlines.",
                       },

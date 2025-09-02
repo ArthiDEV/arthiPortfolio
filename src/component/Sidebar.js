@@ -115,12 +115,12 @@ function Sidebar() {
     
     // Prevent rapid clicking
     if (isToggling) {
-      console.log("Toggle in progress, ignoring click");
+      // console.log("Toggle in progress, ignoring click");
       return;
     }
     
     setIsToggling(true);
-    console.log("Hamburger clicked, current state:", isMobileMenuOpen);
+    // console.log("Hamburger clicked, current state:", isMobileMenuOpen);
     setIsMobileMenuOpen(prev => !prev);
     
     // Reset toggle lock after a short delay
