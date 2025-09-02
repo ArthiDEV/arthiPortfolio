@@ -6,6 +6,7 @@ function Sidebar() {
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("about");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isToggling, setIsToggling] = useState(false); // Prevent rapid clicking
 
   // Scroll spy functionality - Fixed approach for Certificate detection
   useEffect(() => {
@@ -107,15 +108,25 @@ function Sidebar() {
     }
   };
 
-  // Toggle mobile menu - only on explicit click/tap
+  // Toggle mobile menu - simplified with debouncing for reliable single-click behavior
   const toggleMobileMenu = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Ensure this is a click/tap event, not a swipe or drag
-    if (e.type === 'click' || (e.type === 'touchend' && e.touches.length === 0)) {
-      console.log("Hamburger clicked, current state:", isMobileMenuOpen);
-      setIsMobileMenuOpen(!isMobileMenuOpen);
+    
+    // Prevent rapid clicking
+    if (isToggling) {
+      console.log("Toggle in progress, ignoring click");
+      return;
     }
+    
+    setIsToggling(true);
+    console.log("Hamburger clicked, current state:", isMobileMenuOpen);
+    setIsMobileMenuOpen(prev => !prev);
+    
+    // Reset toggle lock after a short delay
+    setTimeout(() => {
+      setIsToggling(false);
+    }, 300);
   };
 
   return (
@@ -127,15 +138,18 @@ function Sidebar() {
       >
         <button
           onClick={toggleMobileMenu}
+          disabled={isToggling}
           className={`hover-effect bg-dark-800/90 backdrop-blur-sm border-2 rounded-lg p-4 text-light-50 hover:bg-dark-700/90 transition-all duration-300 shadow-xl cursor-pointer min-w-[52px] min-h-[52px] flex items-center justify-center ${
             isMobileMenuOpen
               ? "border-secondary-400 bg-secondary-600/20"
               : "border-primary-500/30"
+          } ${
+            isToggling ? "opacity-70 cursor-wait" : ""
           }`}
           aria-label="Toggle mobile menu"
           style={{
             zIndex: 100,
-            pointerEvents: "auto",
+            pointerEvents: isToggling ? "none" : "auto",
             touchAction: "manipulation", // Prevent double-tap zoom and enable fast tap
             userSelect: "none", // Prevent text selection
             WebkitUserSelect: "none",
