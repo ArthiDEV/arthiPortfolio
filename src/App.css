@@ -116,8 +116,8 @@ body {
   right: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
-  backdrop-filter: blur(4px);
+  /* background: linear-gradient(transparent, rgba(0, 0, 0, 0.4)); */
+  /* backdrop-filter: blur(4px); */
   height: 85px;
   display: flex;
   align-items: center;

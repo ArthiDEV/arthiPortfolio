@@ -181,8 +181,15 @@ function About() {
                 className="relative z-10 flex items-center justify-center min-h-screen px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 lg:pt-0"
               >
                 <div className="max-w-6xl w-full">
+  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-light-50 mb-4 sm:mb-6 lg:mb-10 text-center">
+                    ABOUT{" "}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-400 to-purple-400">
+                     ME
+                    </span>
+                  </h1>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
                     {/* Profile Image */}
+                    
                     <div
                       id="about"
                       className="flex justify-center lg:justify-end order-1 lg:order-1"
@@ -208,12 +215,12 @@ function About() {
 
                     {/* Text Content */}
                     <div className="text-center lg:text-left order-2 lg:order-2">
-                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-light-50 mb-3 sm:mb-4 lg:mb-6 leading-tight">
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-light-50 mb-3 sm:mb-4 lg:mb-6 leading-tight">
                         ARTHI{" "}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-400 to-purple-400">
                           HARIKRISHNAN
                         </span>
-                      </h1>
+                      </h2>
 
                       <div className="mb-4 sm:mb-6 lg:mb-8">
                         <p className="text-light-200 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3 lg:mb-4 leading-relaxed">
@@ -421,6 +428,117 @@ function About() {
                   </div>
                 </div>
               </section>
+
+              {/* Page Footer with Site Links */}
+              <footer className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 border-t border-primary-500/20">
+                <div className="max-w-6xl mx-auto w-full">
+                  <h3 className="text-xl sm:text-2xl font-bold text-light-50 mb-6 text-center">
+                    Explore More
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div className="text-center">
+                      <h4 className="text-secondary-400 font-semibold mb-3">Portfolio</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <Link to="/project" className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm">
+                            Web Development Projects
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/poc" className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm">
+                            Proof of Concepts
+                          </Link>
+                        </li>
+                        <li>
+                          <a 
+                            href="#skills"
+                            className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
+                            }}
+                          >
+                            Technical Expertise
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="text-center">
+                      <h4 className="text-secondary-400 font-semibold mb-3">About Me</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <a 
+                            href="#education"
+                            className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById('education').scrollIntoView({ behavior: 'smooth' });
+                            }}
+                          >
+                            Educational Background
+                          </a>
+                        </li>
+                        <li>
+                          <a 
+                            href="#certificate"
+                            className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById('certificate').scrollIntoView({ behavior: 'smooth' });
+                            }}
+                          >
+                            Certifications
+                          </a>
+                        </li>
+                        <li>
+                          <a 
+                            href="#experience"
+                            className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById('experience').scrollIntoView({ behavior: 'smooth' });
+                            }}
+                          >
+                            Work Experience
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="text-center">
+                      <h4 className="text-secondary-400 font-semibold mb-3">Connect</h4>
+                      <ul className="space-y-2">
+                        <li>
+                          <Link to="/contact" className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm">
+                            Contact Information
+                          </Link>
+                        </li>
+                        <li>
+                          <a 
+                            href="https://www.linkedin.com/in/arthi-hari-03a04k1998"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm"
+                          >
+                            LinkedIn Profile
+                          </a>
+                        </li>
+                        <li>
+                          <a 
+                            href="#about"
+                            className="text-light-300 hover:text-secondary-400 transition-colors duration-300 text-sm"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                          >
+                            Back to Top
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </footer>
             </div>
           </div>
         </div>

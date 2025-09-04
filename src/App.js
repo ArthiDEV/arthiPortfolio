@@ -5,6 +5,8 @@ import Sidebar from './component/Sidebar';
 import MouseAnimation from './component/MouseAnimation';
 import ErrorBoundary from './component/ErrorBoundary';
 import { initPerformanceMonitoring } from './utils/performanceMonitor';
+import initPerformanceOptimizations from './utils/bundleOptimizer';
+import { initNetworkOptimizations } from './utils/networkOptimizer';
 import './App.css';
 
 // Lazy load components for better performance
@@ -66,9 +68,20 @@ function AnimatedRoutes() {
 }
 
 function App() {
-  // Initialize performance monitoring
+  // Initialize performance monitoring and optimizations
   useEffect(() => {
-    initPerformanceMonitoring();
+    // Use requestIdleCallback for non-critical initialization
+    const initOptimizations = () => {
+      initPerformanceMonitoring();
+      initPerformanceOptimizations();
+      initNetworkOptimizations();
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initOptimizations);
+    } else {
+      setTimeout(initOptimizations, 100);
+    }
   }, []);
 
   return (
