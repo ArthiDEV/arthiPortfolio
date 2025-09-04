@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import PageTransition from "./PageTransition";
 import AboutSkeleton from "./AboutSkeleton";
 import Copyright from "./Copyright";
-import profile from "../assets/profile/arthi pic.svg";
+import profile from "../assets/profile/arthi pic.png";
 import { Link } from "react-router-dom";
+import OptimizedImage from "./OptimizedImage";
 
 function About() {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +39,89 @@ function About() {
     };
   }, []);
 
+  // Callback for image load - must be before any conditional returns
+  const handleImageLoad = useCallback(() => {
+    if (navigator.onLine) {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Render skill cards with memoization - must be before any conditional returns
+  const renderSkillCards = useCallback((skills, title) => (
+    <div className="mb-4 sm:mb-6 lg:mb-8">
+      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
+        {title}
+      </h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
+        {skills.map((item, index) => (
+          <div
+            key={`${title}-${index}`}
+            className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
+          >
+            <span className="text-2xl sm:text-3xl mb-2 block">
+              {item.icon}
+            </span>
+            <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
+              {item.skill}
+            </h4>
+          </div>
+        ))}
+      </div>
+    </div>
+  ), []);
+
+  // Memoize skills data to prevent re-renders
+  const skillsData = useMemo(() => ({
+    programmingLanguages: [
+      { skill: "JavaScript", icon: "🟨" },
+      { skill: "Python", icon: "🐍" },
+      { skill: "Go", icon: "🐹" },
+      { skill: "Shell Scripting", icon: "🐚" },
+    ],
+    frontend: [
+      { skill: "React.js", icon: "⚛️" },
+      { skill: "Vite.js", icon: "⚡" },
+      { skill: "Next.js", icon: "▲" },
+      { skill: "HTML5", icon: "🌐" },
+      { skill: "CSS", icon: "🎨" },
+      { skill: "Tailwind CSS", icon: "🎭" },
+      { skill: "SCSS", icon: "💎" },
+      { skill: "Bootstrap", icon: "🅱️" },
+      { skill: "Context API", icon: "🔄" },
+    ],
+    backend: [
+      { skill: "Node.js", icon: "🟢" },
+      { skill: "Express.js", icon: "🚀" },
+      { skill: "REST APIs", icon: "🔗" },
+      { skill: "JWT", icon: "🔐" },
+    ],
+    database: [
+      { skill: "MongoDB", icon: "🍃" },
+      { skill: "DynamoDB", icon: "⚡" },
+      { skill: "Firebase", icon: "🔥" },
+      { skill: "Atlas Cloud", icon: "☁️" },
+    ],
+    devops: [
+      { skill: "Docker", icon: "🐳" },
+      { skill: "AWS EC2", icon: "🟠" },
+      { skill: "AWS S3", icon: "📦" },
+      { skill: "AWS Lambda", icon: "⚡" },
+      { skill: "GraphQL", icon: "📊" },
+      { skill: "CloudFormation", icon: "🏗️" },
+      { skill: "EventBridge", icon: "🌉" },
+      { skill: "Firebase Hosting", icon: "🔥" },
+      { skill: "GitHub Actions", icon: "⚙️" },
+      { skill: "CI/CD Pipelines", icon: "🔄" },
+    ],
+    tools: [
+      { skill: "GitHub", icon: "🐙" },
+      { skill: "JIRA", icon: "📋" },
+      { skill: "Figma", icon: "🎨" },
+      { skill: "WordPress", icon: "📝" },
+      { skill: "VS Code", icon: "💻" },
+    ],
+  }), []);
+
   if (isLoading) {
     return <AboutSkeleton />;
   }
@@ -67,14 +151,33 @@ function About() {
                 className="relative z-10 flex items-center justify-center min-h-screen px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 lg:pt-0"
               >
                 <div className="max-w-6xl w-full">
+                       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-light-50 mb-4 sm:mb-6 lg:mb-8 text-center">
+                    ABOUT{" "}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-400 to-purple-400">
+                  ME
+                    </span>
+                    </h2>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
                     {/* Profile Image */}
                     <div
                       id="about"
                       className="flex justify-center lg:justify-end order-1 lg:order-1"
                     >
+                
                       <div className="relative">
-                        <div className=" sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
+                         <div className="w-50 h-50 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
+                          <OptimizedImage
+                            src={profile}
+                            alt="Arthi Harikrishnan Profile"
+                            className="w-full h-full object-cover"
+                            // width={320}
+                            // height={320}
+                            priority={true}
+                            onLoad={handleImageLoad}
+                            sizes="(max-width: 640px) 128px, (max-width: 768px) 192px, (max-width: 1024px) 256px, 320px"
+                          />
+                        </div>
+                        {/* <div className="w-50 h-50 md:w-64 md:h-64 lg:w-full lg:h-full rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
                           <img
                             src={profile}
                             alt="Arthi Harikrishnan Profile"
@@ -93,7 +196,7 @@ function About() {
                               AH
                             </div>
                           </div> */}
-                        </div>
+                        {/* </div> */} 
                         {/* Decorative elements */}
                         <div className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 w-12 h-12 sm:w-20 sm:h-20 bg-secondary-500/20 rounded-full blur-xl" />
                         <div className="absolute -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 w-10 h-10 sm:w-16 sm:h-16 bg-primary-500/20 rounded-full blur-xl" />
@@ -217,154 +320,23 @@ function About() {
                     </span>
                   </h2>
 
+                  {/* Programming Languages */}
+                  {renderSkillCards(skillsData.programmingLanguages, "Programming Languages")}
+
                   {/* Frontend Skills */}
-                  <div className="mb-4 sm:mb-6 lg:mb-8">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
-                      Frontend Development
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
-                      {[
-                        { skill: "React.js", icon: "⚛️" },
-                        { skill: "Vite.js", icon: "⚡" },
-                        { skill: "Next.js", icon: "▲" },
-                        { skill: "JavaScript", icon: "🟨" },
-                        { skill: "HTML5", icon: "🌐" },
-                        { skill: "CSS", icon: "🎨" },
-                        { skill: "Tailwind CSS", icon: "🎭" },
-                        { skill: "SCSS", icon: "💎" },
-                        { skill: "Bootstrap", icon: "🅱️" },
-                        { skill: "Context API", icon: "🔄" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.frontend, "Frontend Development")}
 
                   {/* Backend Skills */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Backend Development
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "Node.js", icon: "🟢" },
-                        { skill: "Express.js", icon: "🚀" },
-                        { skill: "Python", icon: "🐍" },
-                        { skill: "REST APIs", icon: "🔗" },
-                        { skill: "JWT", icon: "🔐" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.backend, "Backend Development")}
 
                   {/* Database Skills */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Database & Storage
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "MongoDB", icon: "🍃" },
-                        { skill: "DynamoDB", icon: "⚡" },
-                        { skill: "Firebase", icon: "🔥" },
-                        { skill: "Atlas Cloud", icon: "☁️" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.database, "Database & Storage")}
 
                   {/* DevOps & Cloud Skills */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Cloud & DevOps
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "Docker", icon: "🐳" },
-                        { skill: "AWS EC2", icon: "🟠" },
-                        { skill: "AWS S3", icon: "📦" },
-                        { skill: "AWS Lambda", icon: "⚡" },
-                        { skill: "GraphQL", icon: "📊" },
-                        { skill: "CloudFormation", icon: "🏗️" },
-                        { skill: "EventBridge", icon: "🌉" },
-                        { skill: "Firebase Hosting", icon: "🔥" },
-                        { skill: "GitHub Actions", icon: "⚙️" },
-                        { skill: "CI/CD Pipelines", icon: "🔄" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.devops, "Cloud & DevOps")}
 
                   {/* Tools & Platforms */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Tools & Platforms
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "GitHub", icon: "🐙" },
-                        { skill: "JIRA", icon: "📋" },
-                        { skill: "Figma", icon: "🎨" },
-                        { skill: "WordPress", icon: "📝" },
-                        { skill: "VS Code", icon: "💻" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.tools, "Tools & Platforms")}
                 </div>
               </section>
 
