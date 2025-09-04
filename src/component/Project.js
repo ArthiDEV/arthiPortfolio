@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PageTransition from './PageTransition';
 import ProjectSkeleton from './ProjectSkeleton';
 import Copyright from './Copyright';
@@ -7,41 +7,8 @@ import { Link } from 'react-router-dom';
 function Project() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate loading time for project data
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500); // 1.5 second loading time
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Handle network issues or slow loading
-  useEffect(() => {
-    const handleOnline = () => {
-      if (navigator.onLine) {
-        setIsLoading(false);
-      }
-    };
-
-    const handleOffline = () => {
-      setIsLoading(true);
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
-  if (isLoading) {
-    return <ProjectSkeleton />;
-  }
-  // Project data array
-  const projects = [
+  // Memoize project data to prevent re-renders
+  const projects = useMemo(() => [
     {
       id: 1,
       title: "Tank-Cleaning CRM",
@@ -104,10 +71,51 @@ function Project() {
       technologies: ["React.js", "Next.js", "SSR","Firebase"],
       link:"https://cloudbeestech.com/"
     }
-  ];
+  ], []);
 
-  // Function to get status color
-  const getStatusColor = (status) => {
+  // Memoize gradient array to prevent re-computation
+  const gradients = useMemo(() => [
+    'from-blue-500/30 to-purple-500/30',
+    'from-green-500/30 to-blue-500/30',
+    'from-purple-500/30 to-pink-500/30',
+    'from-orange-500/30 to-red-500/30',
+    'from-cyan-500/30 to-blue-500/30',
+    'from-indigo-500/30 to-purple-500/30',
+    'from-teal-500/30 to-green-500/30'
+  ], []);
+
+  // Optimized loading effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800); // Reduced loading time
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Handle network issues or slow loading - optimized
+  useEffect(() => {
+    const handleOnline = () => {
+      if (navigator.onLine) {
+        setIsLoading(false);
+      }
+    };
+
+    const handleOffline = () => {
+      setIsLoading(true);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Memoized functions
+  const getStatusColor = useCallback((status) => {
     switch (status.toLowerCase()) {
       case 'live':
       case 'delivered':
@@ -120,23 +128,15 @@ function Project() {
       default:
         return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
     }
-  };
+  }, []);
 
-  // Function to get category gradient
-  const getCategoryGradient = (index) => {
-    const gradients = [
-      'from-blue-500/30 to-purple-500/30',
-      'from-green-500/30 to-blue-500/30',
-      'from-purple-500/30 to-pink-500/30',
-      'from-orange-500/30 to-red-500/30',
-      'from-cyan-500/30 to-blue-500/30',
-      'from-indigo-500/30 to-purple-500/30',
-      'from-teal-500/30 to-green-500/30'
-    ];
+  const getCategoryGradient = useCallback((index) => {
     return gradients[index % gradients.length];
-  };
+  }, [gradients]);
 
-
+  if (isLoading) {
+    return <ProjectSkeleton />;
+  }
 
   return (
     <PageTransition>

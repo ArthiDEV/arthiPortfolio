@@ -1,26 +1,108 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import PageTransition from "./PageTransition";
 import AboutSkeleton from "./AboutSkeleton";
 import Copyright from "./Copyright";
-import profile from "../assets/profile/arthi pic.svg";
+import OptimizedImage from "./OptimizedImage";
+import profileOptimized from "../assets/profile/arthi pic.png";
 import { Link } from "react-router-dom";
 
 function About() {
   const [isLoading, setIsLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
+  // Memoize education data to prevent re-renders
+  const educationData = useMemo(() => [
+    {
+      institution: "Rajiv Gandhi College of Engineering and Technology",
+      degree: "Bachelor of Engineering in Electronics and Communication Engineering",
+      period: "2015 - 2019",
+      desc: "Comprehensive program covering electronics, communication systems, digital signal processing, and embedded systems. Strong foundation in engineering principles with practical applications in modern technology.",
+      gpa: "CGPA: 7.42",
+    },
+    {
+      institution: "Professor Annousamy Higher Secondary School in Bahour",
+      degree: "Higher Secondary Certificate (HSC) - Computer Science",
+      period: "2014 - 2015",
+      desc: "Specialized in Computer Science with focus on programming fundamentals, data structures, and computer applications. Built strong analytical and problem-solving skills.",
+      gpa: "Percentage: 73%",
+    },
+  ], []);
+
+  // Memoize skills data to prevent re-renders
+  const skillsData = useMemo(() => ({
+    programmingLanguages: [
+      { skill: "JavaScript", icon: "🟨" },
+      { skill: "Python", icon: "🐍" },
+      { skill: "Go", icon: "🐹" },
+      { skill: "Shell Scripting", icon: "🐚" },
+    ],
+    frontend: [
+      { skill: "React.js", icon: "⚛️" },
+      { skill: "Vite.js", icon: "⚡" },
+      { skill: "Next.js", icon: "▲" },
+      { skill: "HTML5", icon: "🌐" },
+      { skill: "CSS", icon: "🎨" },
+      { skill: "Tailwind CSS", icon: "🎭" },
+      { skill: "SCSS", icon: "💎" },
+      { skill: "Bootstrap", icon: "🅱️" },
+      { skill: "Context API", icon: "🔄" },
+    ],
+    backend: [
+      { skill: "Node.js", icon: "🟢" },
+      { skill: "Express.js", icon: "🚀" },
+      { skill: "REST APIs", icon: "🔗" },
+      { skill: "JWT", icon: "🔐" },
+    ],
+    database: [
+      { skill: "MongoDB", icon: "🍃" },
+      { skill: "DynamoDB", icon: "⚡" },
+      { skill: "Firebase", icon: "🔥" },
+      { skill: "Atlas Cloud", icon: "☁️" },
+    ],
+    devops: [
+      { skill: "Docker", icon: "🐳" },
+      { skill: "AWS EC2", icon: "🟠" },
+      { skill: "AWS S3", icon: "📦" },
+      { skill: "AWS Lambda", icon: "⚡" },
+      { skill: "GraphQL", icon: "📊" },
+      { skill: "CloudFormation", icon: "🏗️" },
+      { skill: "EventBridge", icon: "🌉" },
+      { skill: "Firebase Hosting", icon: "🔥" },
+      { skill: "GitHub Actions", icon: "⚙️" },
+      { skill: "CI/CD Pipelines", icon: "🔄" },
+    ],
+    tools: [
+      { skill: "GitHub", icon: "🐙" },
+      { skill: "JIRA", icon: "📋" },
+      { skill: "Figma", icon: "🎨" },
+      { skill: "WordPress", icon: "📝" },
+      { skill: "VS Code", icon: "💻" },
+    ],
+  }), []);
+
+  // Memoize experience data
+  const experienceData = useMemo(() => [
+    {
+      company: "Cloudbees Tech",
+      role: "Senior Web Developer",
+      period: "Sep 2023 - Present",
+      desc: "Leading a small team of 3 members, successfully completed 8+ projects with hands-on development and project management. Responsible for task assignment, team guidance, and ensuring project deliverables meet quality standards and deadlines.",
+    },
+  ], []);
+
+  // Optimized loading effect
   useEffect(() => {
-    // Simulate loading time for assets and content
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // 2 second loading time
+    }, 800); // Reduced loading time
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Handle network issues or slow loading
+  // Optimized network status handling
   useEffect(() => {
     const handleOnline = () => {
-      if (navigator.onLine) {
+      if (navigator.onLine && imageLoaded) {
         setIsLoading(false);
       }
     };
@@ -36,7 +118,39 @@ function About() {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
+  }, [imageLoaded]);
+
+  // Callback for image load
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+    if (navigator.onLine) {
+      setIsLoading(false);
+    }
   }, []);
+
+  // Render skill cards with memoization
+  const renderSkillCards = useCallback((skills, title) => (
+    <div className="mb-4 sm:mb-6 lg:mb-8">
+      <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
+        {title}
+      </h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
+        {skills.map((item, index) => (
+          <div
+            key={`${title}-${index}`}
+            className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
+          >
+            <span className="text-2xl sm:text-3xl mb-2 block">
+              {item.icon}
+            </span>
+            <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
+              {item.skill}
+            </h4>
+          </div>
+        ))}
+      </div>
+    </div>
+  ), []);
 
   if (isLoading) {
     return <AboutSkeleton />;
@@ -74,25 +188,17 @@ function About() {
                       className="flex justify-center lg:justify-end order-1 lg:order-1"
                     >
                       <div className="relative">
-                        <div className=" sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
-                          <img
-                            src={profile}
+                        <div className="w-50 h-50 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
+                          <OptimizedImage
+                            src={profileOptimized}
                             alt="Arthi Harikrishnan Profile"
                             className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.target.style.display = "none";
-                              e.target.nextSibling.style.display = "flex";
-                            }}
+                            // width={320}
+                            // height={320}
+                            priority={true}
+                            onLoad={handleImageLoad}
+                            sizes="(max-width: 640px) 128px, (max-width: 768px) 192px, (max-width: 1024px) 256px, 320px"
                           />
-                          {/* Fallback placeholder if image fails to load */}
-                          {/* <div
-                            className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-600 flex items-center justify-center"
-                            style={{ display: "none" }}
-                          >
-                            <div className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl text-white font-bold">
-                              AH
-                            </div>
-                          </div> */}
                         </div>
                         {/* Decorative elements */}
                         <div className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 w-12 h-12 sm:w-20 sm:h-20 bg-secondary-500/20 rounded-full blur-xl" />
@@ -153,26 +259,7 @@ function About() {
                     </span>
                   </h2>
                   <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                    {[
-                      {
-                        institution:
-                          "Rajiv Gandhi College of Engineering and Technology",
-                        degree:
-                          "Bachelor of Engineering in Electronics and Communication Engineering",
-                        period: "2015 - 2019",
-                        desc: "Comprehensive program covering electronics, communication systems, digital signal processing, and embedded systems. Strong foundation in engineering principles with practical applications in modern technology.",
-                        gpa: "CGPA: 7.42",
-                      },
-                      {
-                        institution:
-                          "Professor Annousamy Higher Secondary School in Bahour",
-                        degree:
-                          "Higher Secondary Certificate (HSC) - Computer Science",
-                        period: "2014 - 2015",
-                        desc: "Specialized in Computer Science with focus on programming fundamentals, data structures, and computer applications. Built strong analytical and problem-solving skills.",
-                        gpa: "Percentage: 73%",
-                      },
-                    ].map((edu, index) => (
+                    {educationData.map((edu, index) => (
                       <div
                         key={index}
                         className="bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-4 sm:p-6 lg:p-8 hover:border-secondary-500/40 transition-all duration-300"
@@ -218,180 +305,22 @@ function About() {
                   </h2>
 
                   {/* Programming Languages */}
-                  <div className="mb-4 sm:mb-6 lg:mb-8">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
-                      Programming Languages
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
-                      {[
-                        // { skill: "C", icon: "🔤" },
-                        // { skill: "C++", icon: "➕" },
-                        { skill: "JavaScript", icon: "🟨" },
-                        { skill: "Python", icon: "🐍" },
-                        { skill: "Go", icon: "🐹" },
-                        { skill: "Shell Scripting", icon: "🐚" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.programmingLanguages, "Programming Languages")}
 
                   {/* Frontend Skills */}
-                  <div className="mb-4 sm:mb-6 lg:mb-8">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-secondary-400 mb-2 sm:mb-3 lg:mb-4 text-center">
-                      Frontend Development
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
-                      {[
-                        { skill: "React.js", icon: "⚛️" },
-                        { skill: "Vite.js", icon: "⚡" },
-                        { skill: "Next.js", icon: "▲" },
-                        { skill: "HTML5", icon: "🌐" },
-                        { skill: "CSS", icon: "🎨" },
-                        { skill: "Tailwind CSS", icon: "🎭" },
-                        { skill: "SCSS", icon: "💎" },
-                        { skill: "Bootstrap", icon: "🅱️" },
-                        { skill: "Context API", icon: "🔄" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.frontend, "Frontend Development")}
 
                   {/* Backend Skills */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Backend Development
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "Node.js", icon: "🟢" },
-                        { skill: "Express.js", icon: "🚀" },
-                        { skill: "REST APIs", icon: "🔗" },
-                        { skill: "JWT", icon: "🔐" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.backend, "Backend Development")}
 
                   {/* Database Skills */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Database & Storage
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "MongoDB", icon: "🍃" },
-                        { skill: "DynamoDB", icon: "⚡" },
-                        { skill: "Firebase", icon: "🔥" },
-                        { skill: "Atlas Cloud", icon: "☁️" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.database, "Database & Storage")}
 
                   {/* DevOps & Cloud Skills */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Cloud & DevOps
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "Docker", icon: "🐳" },
-                        { skill: "AWS EC2", icon: "🟠" },
-                        { skill: "AWS S3", icon: "📦" },
-                        { skill: "AWS Lambda", icon: "⚡" },
-                        { skill: "GraphQL", icon: "📊" },
-                        { skill: "CloudFormation", icon: "🏗️" },
-                        { skill: "EventBridge", icon: "🌉" },
-                        { skill: "Firebase Hosting", icon: "🔥" },
-                        { skill: "GitHub Actions", icon: "⚙️" },
-                        { skill: "CI/CD Pipelines", icon: "🔄" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.devops, "Cloud & DevOps")}
 
                   {/* Tools & Platforms */}
-                  <div className="mb-6 lg:mb-8">
-                    <h3 className="text-xl sm:text-2xl font-bold text-secondary-400 mb-3 lg:mb-4 text-center">
-                      Tools & Platforms
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                      {[
-                        { skill: "GitHub", icon: "🐙" },
-                        { skill: "JIRA", icon: "📋" },
-                        { skill: "Figma", icon: "🎨" },
-                        { skill: "WordPress", icon: "📝" },
-                        { skill: "VS Code", icon: "💻" },
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="hover-effect bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-3 sm:p-4 hover:border-secondary-500/40 transition-all duration-300 text-center"
-                        >
-                          <span className="text-2xl sm:text-3xl mb-2 block">
-                            {item.icon}
-                          </span>
-                          <h4 className="text-light-50 text-xs sm:text-sm font-semibold">
-                            {item.skill}
-                          </h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  {renderSkillCards(skillsData.tools, "Tools & Platforms")}
                 </div>
               </section>
 
@@ -466,21 +395,7 @@ function About() {
                     </span>
                   </h2>
                   <div className="space-y-6 lg:space-y-8">
-                    {[
-                      {
-                        company: "Cloudbees Tech",
-                        role: "Senior Web Developer",
-                        period: "Sep 2023 - Present",
-                        desc: "Leading a small team of 3 members, successfully completed 8+ projects with hands-on development and project management. Responsible for task assignment, team guidance, and ensuring project deliverables meet quality standards and deadlines.",
-                      },
-
-                      // {
-                      //   company: "Freelance",
-                      //   role: "Web Developer",
-                      //   period: "Nov 2024 - Present",
-                      //   desc: "Worked with various clients to create custom websites and web applications tailored to their specific needs.",
-                      // },
-                    ].map((exp, index) => (
+                    {experienceData.map((exp, index) => (
                       <div
                         key={index}
                         className="bg-dark-800/50 backdrop-blur-sm border border-primary-500/20 rounded-xl p-4 sm:p-6 lg:p-8 hover:border-secondary-500/40 transition-all duration-300"

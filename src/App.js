@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Sidebar from './component/Sidebar';
-import About from './component/About';
-import Project from './component/Project';
-import POC from './component/POC';
-import Contact from './component/Contact';
 import MouseAnimation from './component/MouseAnimation';
+import ErrorBoundary from './component/ErrorBoundary';
+import { initPerformanceMonitoring } from './utils/performanceMonitor';
 import './App.css';
+
+// Lazy load components for better performance
+const About = lazy(() => import('./component/About'));
+const Project = lazy(() => import('./component/Project'));
+const POC = lazy(() => import('./component/POC'));
+const Contact = lazy(() => import('./component/Contact'));
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen bg-dark-900">
+    <div className="relative">
+      <div className="w-16 h-16 border-4 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+      <div className="absolute inset-0 w-16 h-16 border-4 border-secondary-500/20 border-b-secondary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.75s' }}></div>
+    </div>
+  </div>
+);
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -23,10 +37,26 @@ function AnimatedRoutes() {
       >
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<About />} />
-          <Route path="/project" element={<Project />} />
-          <Route path="/poc" element={<POC />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/home" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <About />
+            </Suspense>
+          } />
+          <Route path="/project" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Project />
+            </Suspense>
+          } />
+          <Route path="/poc" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <POC />
+            </Suspense>
+          } />
+          <Route path="/contact" element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Contact />
+            </Suspense>
+          } />
           {/* Catch-all route for invalid URLs - redirect to About */}
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
@@ -36,8 +66,14 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  // Initialize performance monitoring
+  useEffect(() => {
+    initPerformanceMonitoring();
+  }, []);
+
   return (
-    <Router>
+    <ErrorBoundary>
+      <Router>
       <div className="flex min-h-screen font-custom antialiased bg-dark-900 overflow-x-hidden">
         <Sidebar />
         <div className="relative flex-1 w-full lg:ml-80  min-h-screen overflow-y-auto overflow-x-hidden">
@@ -53,6 +89,7 @@ function App() {
         <MouseAnimation />
       </div>
     </Router>
+    </ErrorBoundary>
   );
 }
 
