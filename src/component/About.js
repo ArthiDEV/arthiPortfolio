@@ -166,6 +166,9 @@ function About() {
                 
                       <div className="relative">
                          <div className="w-50 h-50 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
+                        <picture>
+
+
                           <OptimizedImage
                             src={profile}
                             alt="Arthi Harikrishnan Profile"
@@ -176,6 +179,7 @@ function About() {
                             onLoad={handleImageLoad}
                             sizes="(max-width: 640px) 128px, (max-width: 768px) 192px, (max-width: 1024px) 256px, 320px"
                           />
+                        </picture>
                         </div>
                         {/* <div className="w-50 h-50 md:w-64 md:h-64 lg:w-full lg:h-full rounded-2xl overflow-hidden shadow-2xl border-4 border-primary-500/30">
                           <img
