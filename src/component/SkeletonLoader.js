@@ -231,7 +231,7 @@ export const SkeletonContactInfo = () => (
   </div>
 );
 
-export default {
+const SkeletonComponents = {
   SkeletonBox,
   SkeletonText,
   SkeletonCircle,
@@ -242,3 +242,5 @@ export default {
   SkeletonContactForm,
   SkeletonContactInfo
 };
+
+export default SkeletonComponents;
