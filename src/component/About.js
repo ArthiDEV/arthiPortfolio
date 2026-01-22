@@ -74,9 +74,9 @@ function About() {
   const skillsData = useMemo(() => ({
     programmingLanguages: [
       { skill: "JavaScript", icon: "🟨" },
-      { skill: "Python", icon: "🐍" },
-      { skill: "Go", icon: "🐹" },
-      { skill: "Shell Scripting", icon: "🐚" },
+      // { skill: "Python", icon: "🐍" },
+      // { skill: "Go", icon: "🐹" },
+      // { skill: "Shell Scripting", icon: "🐚" },
     ],
     frontend: [
       { skill: "React.js", icon: "⚛️" },
@@ -418,8 +418,14 @@ function About() {
                     {[
                       {
                         company: "Cloudbees Tech",
+                        role: "Senior Software Engineer",
+                        period: "Jan 2025 - Present",
+                        desc: "Leading a small team of 3 members, successfully completed 8+ projects with hands-on development and project management. Responsible for task assignment, team guidance, and ensuring project deliverables meet quality standards and deadlines.",
+                      },
+                      {
+                        company: "Cloudbees Tech",
                         role: "Web Developer",
-                        period: "Sep 2023 - Present",
+                        period: "Sep 2023 - Dec 2024",
                         desc: "Leading a small team of 3 members, successfully completed 8+ projects with hands-on development and project management. Responsible for task assignment, team guidance, and ensuring project deliverables meet quality standards and deadlines.",
                       },
 
