@@ -1,6 +1,6 @@
 import React from 'react';
 import PageTransition from './PageTransition';
-import { SkeletonBox, SkeletonText, SkeletonCircle, SkeletonSkillCard } from './SkeletonLoader';
+import { SkeletonText, SkeletonSkillCard } from './SkeletonLoader';
 
 const AboutSkeleton = () => {
   return (

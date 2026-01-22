@@ -5,7 +5,6 @@ function MouseAnimation() {
   const [trails, setTrails] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const [cursorType, setCursorType] = useState('default');
 
   useEffect(() => {
     let animationId;
@@ -25,11 +24,7 @@ function MouseAnimation() {
       
       setIsHovering(isInteractive);
       
-      if (isInteractive) {
-        setCursorType('hover');
-      } else {
-        setCursorType('default');
-      }
+
       
       // Add new trail point
       setTrails(prevTrails => {

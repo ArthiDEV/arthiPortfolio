@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PageTransition from './PageTransition';
 import ProjectSkeleton from './ProjectSkeleton';
 import Copyright from './Copyright';
-import { Link } from 'react-router-dom';
 
 function Project() {
   const [isLoading, setIsLoading] = useState(true);
