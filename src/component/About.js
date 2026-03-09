@@ -222,7 +222,7 @@ function About() {
                           <span className="text-primary-400 font-semibold"> scalable</span> and <span className="text-primary-400 font-semibold">user-friendly</span> web applications.
                         </p>
                         <p className="text-light-300 max-sm:text-justify text-xs sm:text-sm lg:text-base leading-relaxed">
-                          I'm a <span className="text-secondary-400 font-semibold">Senior Web Developer / Full Stack Developer</span> with 2+ years of experience
+                          I'm a <span className="text-secondary-400 font-semibold">Senior Web Developer / MERN Stack Developer</span> with 2+ years of experience
                           in building scalable, cloud-powered applications.
                           Skilled in <span className="text-secondary-400 font-semibold">React.js</span>, <span className="text-secondary-400 font-semibold">Node.js</span>, <span className="text-secondary-400 font-semibold">MongoDB</span>, and <span className="text-secondary-400 font-semibold">Express.js</span>,
                           I also bring expertise in <span className="text-secondary-400 font-semibold">AWS</span> services (EC2, S3,
